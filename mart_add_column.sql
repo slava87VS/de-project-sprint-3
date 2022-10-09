@@ -1,0 +1,1 @@
+alter table mart.f_sales add IF NOT EXISTS status varchar(50);
