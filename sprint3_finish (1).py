@@ -5,9 +5,8 @@ import pandas as pd
 
 from datetime import datetime, timedelta
 from airflow import DAG
-from airflow.operators.python_operator import PythonOperator, BranchPythonOperator
+from airflow.operators.python_operator import PythonOperator
 from airflow.providers.postgres.operators.postgres import PostgresOperator
-from airflow.hooks.base import BaseHook
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 from airflow.hooks.http_hook import HttpHook
 
@@ -17,12 +16,12 @@ base_url = http_conn_id.host
 
 postgres_conn_id = 'postgresql_de'
 
-nickname = 'Nick'
-cohort = 1
+NICKNAME = 'Nick'
+COHORT = 1
 
 headers = {
-    'X-Nickname': nickname,
-    'X-Cohort': cohort,
+    'X-Nickname': NICKNAME,
+    'X-Cohort': COHORT,
     'X-Project': 'True',
     'X-API-KEY': api_key,
     'Content-Type': 'application/x-www-form-urlencoded'
@@ -57,6 +56,7 @@ def get_report(ti):
             time.sleep(10)
 
     if not report_id:
+        print('The get_report request failed')
         raise TimeoutError()
 
     ti.xcom_push(key='report_id', value=report_id)
@@ -86,8 +86,7 @@ def upload_data_to_staging(filename, date, pg_table, pg_schema, ti):
     response = requests.get(s3_filename)
     open(f"{local_filename}", "wb").write(response.content)
 
-    df = pd.read_csv(local_filename)
-    df.drop_duplicates(subset=['id'])
+    df = pd.read_csv(local_filename, index=False)
 
     postgres_hook = PostgresHook(postgres_conn_id)
     engine = postgres_hook.get_sqlalchemy_engine()
@@ -99,7 +98,7 @@ args = {
     'email': ['student@example.com'],
     'email_on_failure': False,
     'email_on_retry': False,
-    'retries': 0
+    'retries': 3
 }
 
 business_dt = '{{ ds }}'
