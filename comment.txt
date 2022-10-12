@@ -1,11 +1,4 @@
-Привет, Кирилл! ) Спасибо за подробные комментарии. По ним я все поправил, также изучил логирование и установил библиотеку flake8 в PyCharm. Осталось немного вопросов:
-
-1. Подскажи пожалуйста про исключение raise, не могу понять как оно работает
-
-2. Правильный ли у меня запрос с COPY? Почему то не отрабатывает:
-COPY staging.user_order_log FROM PROGRAM 'curl "https://storage.yandexcloud.net/s3-sprint3/cohort_1/Nick/project/TWpBeU1pMHhNQzB3TjFReE16b3dPRG8wTlFsT2FXTnI=/user_order_log.csv"'
-Пишет: SQL Error [22P02]: ERROR: invalid input syntax for type integer: "<?xml version="1.0" encoding="UTF-8"?>"
-  Где: COPY user_order_log, line 1, column id: "<?xml version="1.0" encoding="UTF-8"?>"
-
-3. Что означает '{{ ds }}'?
+Кирилл, привет! )
+Спасибо большое!
+Вопросов больше нет :)
 
